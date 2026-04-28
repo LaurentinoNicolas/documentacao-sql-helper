@@ -3,10 +3,10 @@
   "displayName": "Documentação SQL Helper",
   "description": "",
   "version": "1.0.0",
-  "publisher": "SEU_PUBLISHER",
+  "publisher": "SurfSpot",
   "repository": {
     "type": "git",
-    "url": "https://github.com/seu-repo"
+    "url": "https://github.com/LaurentinoNicolas/documentacao-sql-helper"
   },
   "icon": "images/icon.png",
   "keywords": ["sql", "documentation", "database" , "procedure"],
