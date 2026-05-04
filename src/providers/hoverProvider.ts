@@ -54,8 +54,11 @@ export function registerHover(context: vscode.ExtensionContext) {
             return new vscode.Hover(md);
          }
 
+         md.isTrusted = true;
+         md.supportHtml = true;
+
          md.appendMarkdown(`### 📘 ${docId}\n\n`);
-         md.appendMarkdown(`${doc.descricao.replace(/\n/g, '  \n')}\n\n`);
+         md.appendMarkdown(formatarMarkdownHover(doc.descricao) + '\n\n');
          md.appendMarkdown(`---\n`);
          md.appendMarkdown(`👤 ${doc.autor}  \n`);
          md.appendMarkdown(`🕒 ${dataFormatada}`);
@@ -65,4 +68,27 @@ export function registerHover(context: vscode.ExtensionContext) {
    });
 
    context.subscriptions.push(hoverProvider);
+
+   
+}
+
+function formatarMarkdownHover(texto: string): string {
+   if (!texto) return '';
+
+   const linhas = texto.split('\n');
+   let dentroCodeBlock = false;
+
+   return linhas.map(linha => {
+
+      if (linha.trim().startsWith('```')) {
+         dentroCodeBlock = !dentroCodeBlock;
+         return linha;
+      }
+
+      if (dentroCodeBlock) {
+         return linha;
+      }
+
+      return linha + '  ';
+   }).join('\n');
 }

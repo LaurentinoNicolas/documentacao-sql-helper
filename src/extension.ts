@@ -3,6 +3,7 @@ import { registerHover } from './providers/hoverProvider';
 import { registerCodeLens } from './providers/codeLensProvider';
 import { openConnectionWebview } from './webview/connectionWebview';
 import { getConnection } from './database/connection';
+import {registerCompletionItemProvider} from './providers/completionProvider'
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -19,6 +20,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
    registerHover(context);
    registerCodeLens(context);
+   registerCompletionItemProvider(context)
 
    const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 
@@ -32,41 +34,41 @@ export async function activate(context: vscode.ExtensionContext) {
    });
 
    context.subscriptions.push(
-    configurar,
-    refreshStatusBar,
-    statusBar
-);
+      configurar,
+      refreshStatusBar,
+      statusBar
+   );
 }
 
 async function updateStatusBar(
-    statusBar: vscode.StatusBarItem,
-    context: vscode.ExtensionContext
+   statusBar: vscode.StatusBarItem,
+   context: vscode.ExtensionContext
 ) {
 
-    const config = vscode.workspace.getConfiguration('documentacaoSql');
+   const config = vscode.workspace.getConfiguration('documentacaoSql');
 
-    const server = config.get<string>('db.server');
-    const database = config.get<string>('db.database');
+   const server = config.get<string>('db.server');
+   const database = config.get<string>('db.database');
 
-    if (!server || !database) {
+   if (!server || !database) {
 
-        statusBar.text = '$(warning) Configurar SQL Doc';
-        statusBar.tooltip = 'Clique para configurar conexão';
-        return;
-    }
+      statusBar.text = '$(warning) Configurar SQL Doc';
+      statusBar.tooltip = 'Clique para configurar conexão';
+      return;
+   }
 
-    try {
+   try {
 
-        await getConnection(context);
+      await getConnection(context);
 
-        statusBar.text = `DOC-SQL - $(database) ${database}`;
-        statusBar.tooltip = `Conectado em ${server}`;
+      statusBar.text = `DOC-SQL - $(database) ${database}`;
+      statusBar.tooltip = `Conectado em ${server}`;
 
-    } catch(e) {
+   } catch (e) {
       console.log(e)
-        statusBar.text = 'DOC-SQL - $(error) Erro conexão';
-        statusBar.tooltip = 'Erro ao conectar no banco';
-    }
+      statusBar.text = 'DOC-SQL - $(error) Erro conexão';
+      statusBar.tooltip = 'Erro ao conectar no banco';
+   }
 }
 
 export function deactivate() { }

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as sql from 'mssql';
 import { inicializarBanco } from './init';
+import { parseSqlServer } from '../utils/sqlServerParser';
 
 let pool: sql.ConnectionPool | null = null;
 
@@ -19,14 +20,18 @@ export async function getConnection(context: vscode.ExtensionContext) {
       throw new Error('Banco não configurado');
    }
 
+   const parsedServer = parseSqlServer(server);
+
    pool = new sql.ConnectionPool({
       user,
       password,
-      server,
+      server: parsedServer.server,
       database,
       options: {
          encrypt: false,
-         trustServerCertificate: true
+         trustServerCertificate: true,
+         ...(parsedServer.port ? { port: parsedServer.port } : {}),
+         ...(parsedServer.instanceName ? { instanceName: parsedServer.instanceName } : {})
       }
    });
 
@@ -53,14 +58,18 @@ export async function testarConexao(data: any): Promise<boolean> {
    let temp: sql.ConnectionPool | null = null;
 
    try {
+      const parsedServer = parseSqlServer(data.server);
+
       temp = new sql.ConnectionPool({
          user: data.user,
          password: data.password,
-         server: data.server,
+         server: parsedServer.server,
          database: data.database,
          options: {
             encrypt: false,
-            trustServerCertificate: true
+            trustServerCertificate: true,
+            ...(parsedServer.port ? { port: parsedServer.port } : {}),
+            ...(parsedServer.instanceName ? { instanceName: parsedServer.instanceName } : {})
          }
       });
 
