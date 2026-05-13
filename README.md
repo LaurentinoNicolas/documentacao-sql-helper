@@ -28,6 +28,16 @@ A extensão foi criada para equipes que trabalham com scripts, procedures e regr
 
 ---
 
+## Configurando a conexão
+
+Para usar a extensão, primeiro configure a conexão com o SQL Server.
+
+Clique no botão da extensão na **Status Bar** do VS Code, geralmente no **canto inferior direito**, preencha os dados do banco e clique em **Testar**. Após validar a conexão, clique em **Salvar**.
+
+![Configuração da conexão](images/conexao.gif)
+
+---
+
 ## Como funciona
 
 No arquivo SQL, adicione uma marcação no trecho que deseja documentar:
