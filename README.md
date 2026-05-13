@@ -1,199 +1,204 @@
-# 📘 SQL Documentation
+# SQL Documentation
 
-Documente suas queries SQL **diretamente no código** e visualize tudo de forma rápida, contextual e organizada dentro do VS Code.
+Documente trechos SQL diretamente no VS Code usando comentários `--@doc:` e mantenha as descrições centralizadas em um banco SQL Server.
+
+A extensão foi criada para equipes que trabalham com scripts, procedures e regras SQL complexas, permitindo registrar explicações técnicas e de negócio sem adicionar comentários sensíveis diretamente no arquivo enviado ao cliente.
 
 ---
 
-## 🚀 Visão Geral
+## Demonstração
 
-O **SQL Documentation** permite adicionar descrições estruturadas às suas queries utilizando comentários simples como:
+![Demonstração da extensão](images/demo.gif)
+
+
+---
+
+## Recursos
+
+- Documentação inline usando `--@doc:NOME_DO_DOC`
+- Visualização da documentação ao passar o mouse sobre o trecho
+- Edição e criação da documentação pelo próprio VS Code
+- Armazenamento centralizado em SQL Server
+- Histórico automático de inclusões, alterações e exclusões
+- Suporte a Markdown na descrição
+- Suporte a trechos de código SQL dentro da documentação
+- Configuração visual da conexão com banco
+- Cache por arquivo, banco e documento para melhor desempenho
+- Autocomplete para criação rápida do padrão `--@doc:`
+
+---
+
+## Como funciona
+
+No arquivo SQL, adicione uma marcação no trecho que deseja documentar:
 
 ```sql
--- @doc:VALIDAR_CLIENTE
-SELECT * FROM CLIENTE
+--@doc:VALIDAR_LOJA
+SELECT *
+FROM LOJA
+WHERE ATIVO = 1;
 ```
 
-Com isso, você ganha:
-
-* 📖 Documentação integrada ao código
-* ⚡ Acesso rápido via hover
-* ✏️ Edição sem sair do editor
-* 🗄️ Persistência centralizada no banco
+Ao passar o mouse sobre a linha do `--@doc`, a extensão consulta a documentação cadastrada no banco e exibe o conteúdo formatado no hover do VS Code.
 
 ---
 
-## ✨ Funcionalidades
+## Criar uma documentação
 
-### 🔍 Hover inteligente
-
-Visualize a documentação apenas passando o mouse sobre o `@doc`.
-
----
-
-### ✏️ Edição inline (CodeLens)
-
-Edite ou crie documentações diretamente no arquivo SQL com um clique.
-
----
-
-### 💾 Persistência em SQL Server
-
-As documentações são armazenadas de forma estruturada no banco de dados.
-
----
-
-### ⚡ Cache otimizado
-
-Melhor performance com cache inteligente por arquivo.
-
----
-
-### 🧠 Contexto por arquivo
-
-Permite reutilizar o mesmo identificador (`@doc`) em arquivos diferentes sem conflito.
-
----
-
-### 🧾 Histórico automático
-
-Controle de alterações com auditoria automática:
-
-* INSERT
-* UPDATE
-* DELETE
-
----
-
-## 🧩 Como usar
-
-1. Adicione um identificador no seu SQL:
+Digite a marcação no arquivo SQL:
 
 ```sql
+--@doc:VALIDAR_CLIENTE
+```
+
+A extensão exibirá uma ação acima da linha:
+
+```text
+Editar / Criar Doc
+```
+
+Clique nessa opção para abrir o editor da documentação.
+
+No editor, escreva a descrição e clique em **Salvar**.
+
+---
+
+## Editar uma documentação existente
+
+Para editar uma documentação já cadastrada:
+
+1. Abra o arquivo SQL.
+2. Localize a linha com `--@doc:NOME_DO_DOC`.
+3. Clique em **Editar / Criar Doc**.
+4. Altere o texto.
+5. Clique em **Salvar**.
+
+A alteração será gravada no banco e o histórico será atualizado automaticamente.
+
+---
+
+## Visualização via Hover
+
+Ao passar o mouse sobre o comentário `--@doc`, a extensão exibe:
+
+- Nome do documento
+- Descrição formatada
+- Autor da inclusão ou alteração
+- Data no padrão brasileiro
+
+Exemplo:
+
+```text
+VALIDAR_LOJA
+
+Valida se a loja está ativa antes do processamento.
+
+Autor: Nicolas
+Atualizado em: 13/05/2026 15:40
+```
+
+---
+
+## Autocomplete
+
+A extensão possui autocomplete para facilitar a criação do padrão de documentação.
+
+Ao digitar:
+
+```sql
+@
+```
+
+ou:
+
+```sql
+--@
+```
+
+será sugerido o padrão:
+
+```sql
+--@doc:NOME
+```
+
+Após selecionar a sugestão, basta substituir `NOME` pelo identificador desejado.
+
+Exemplo:
+
+```sql
+--@doc:CARREGAR_CLIENTES_ATIVOS
+```
+
+---
+
+## Formatos aceitos
+
+A extensão aceita os seguintes formatos:
+
+```sql
+--@doc:VALIDAR_LOJA
 -- @doc:VALIDAR_LOJA
-SELECT * FROM LOJA
+-- @doc: VALIDAR_LOJA
+-- @DOC: VALIDAR_LOJA
 ```
 
-2. Passe o mouse para visualizar
-3. Clique em **Editar / Criar Doc**
-4. Escreva a descrição e salve
+Quando houver texto após o nome do documento, apenas o primeiro identificador será considerado.
 
----
+Exemplo:
 
-## 👀 Exemplo de visualização
-
-```
-📘 VALIDAR_LOJA
-
-Valida se a loja está ativa e apta para operação.
-
-👤 Nicolas Laurentino
-🕒 25/04/2026 14:32
+```sql
+--@doc:VALIDAR_LOJA texto extra depois
 ```
 
----
+Nesse caso, o identificador utilizado será:
 
-## 🔌 Configuração
-
-Ao iniciar a extensão, será solicitado:
-
-* Servidor SQL
-* Database
-* Usuário
-* Senha
-* Nome do usuário (autor)
-
----
-
-## 🗄️ Estrutura criada automaticamente
-
-A extensão cria automaticamente no banco:
-
-* `DOCUMENTACAO_SQL`
-* `DOCUMENTACAO_SQL_HISTORICO`
-* Índices otimizados
-* Trigger de auditoria
-
----
-
-## 🔐 Segurança
-
-* Senha armazenada com segurança via `VS Code Secrets`
-* Nenhuma credencial exposta em arquivos
-
----
-
-## ⚙️ Configurações
-
-```properties
-documentacaoSql.db.server
-documentacaoSql.db.database
-documentacaoSql.db.user
-documentacaoSql.usuario
+```text
+VALIDAR_LOJA
 ```
 
 ---
 
-## 📌 Requisitos
+## Markdown na documentação
 
-* SQL Server acessível
-* Permissão de criação de tabelas (primeira execução)
+A descrição aceita Markdown, permitindo criar textos mais claros e organizados.
 
----
+### Negrito
 
-## 🐛 Troubleshooting
+```md
+**Texto em negrito**
+```
 
-### Não conecta
+### Itálico
 
-* Verifique servidor e porta (1433)
-* Firewall ou VPN
-* Nome da instância
+```md
+*Texto em itálico*
+```
 
----
+### Títulos
 
-### Sem permissão
+```md
+### Título da seção
+```
 
-* Usuário sem permissão de CREATE TABLE
+### Listas
 
----
+```md
+- Primeiro item
+- Segundo item
+- Terceiro item
+```
 
-## 🧭 Roadmap
+### Código inline
 
-* [ ] Autocomplete para `@doc`
-* [ ] Visualização de histórico
-* [ ] Suporte a múltiplos bancos
-* [ ] Exportação de documentação
-* [ ] Integração com APIs
+```md
+Use o campo `STATUS` para validar o registro.
+```
 
----
+### Bloco de código SQL
 
-## 📷 Preview
-
-> Recomenda-se adicionar um GIF demonstrando:
->
-> * Hover
-> * Edição
-> * Salvamento
-
----
-
-## 👨‍💻 Autor
-
-**Nicolas Laurentino**
-
----
-
-## 🤝 Contribuição
-
-Pull requests e sugestões são bem-vindos.
-
----
-
-## ⭐ Se curtir o projeto
-
-Considere deixar uma estrela e compartilhar com outros devs 🚀
-
----
-
-## 📄 Licença
-
-MIT
+````md
+```sql
+SELECT *
+FROM CLIENTE
+WHERE STATUS = 'ATIVO';
+```

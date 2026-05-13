@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { buscarDocBanco } from '../database/repository';
-import { docsCache } from '../utils/cache';
+import { docsCache, getDocCacheKey } from '../utils/cache';
 import * as path from 'path';
 
 export function registerHover(context: vscode.ExtensionContext) {
@@ -12,13 +12,13 @@ export function registerHover(context: vscode.ExtensionContext) {
 
          if (!line.includes('@doc')) return;
 
-         const match = line.match(/--\s*@doc:(\w+)/);
+         const match = line.match(/--\s*@doc:\s*([^\s]+)/i);
          if (!match) return;
 
          const docId = match[1];
 
          const nomeArquivo = path.basename(document.fileName);
-         const cacheKey = `${nomeArquivo}:${docId}`;
+         const cacheKey = getDocCacheKey(nomeArquivo, docId);
 
          let doc = docsCache[cacheKey];
 

@@ -14,7 +14,7 @@ export function registerCodeLens(context: vscode.ExtensionContext) {
 
                 if (!line.includes('@doc')) continue;
 
-                const match = line.match(/--\s*@doc:(\w+)/);
+                const match = line.match(/--\s*@doc:\s*([^\s]+)/i);
                 if (!match) continue;
 
                 const docId = match[1];

@@ -7,7 +7,19 @@ let pool: sql.ConnectionPool | null = null;
 
 export async function getConnection(context: vscode.ExtensionContext) {
 
-   if (pool) return pool;
+   if (pool && pool.connected) {
+      return pool;
+   }
+
+   if (pool) {
+      try {
+         await pool.close();
+      } catch (e) {
+         console.error('Erro ao fechar pool inválido:', e);
+      } finally {
+         pool = null;
+      }
+   }
 
    const config = vscode.workspace.getConfiguration('documentacaoSql');
 
@@ -85,5 +97,17 @@ export async function testarConexao(data: any): Promise<boolean> {
 
    } finally {
       if (temp) await temp.close();
+   }
+}
+
+export async function resetConnection() {
+   if (pool) {
+      try {
+         await pool.close();
+      } catch (e) {
+         console.error('Erro ao fechar conexão:', e);
+      } finally {
+         pool = null;
+      }
    }
 }

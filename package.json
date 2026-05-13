@@ -2,8 +2,9 @@
   "name": "documentacao-sql",
   "displayName": "Documentação SQL Helper",
   "description": "",
-  "version": "2.0.1",
-  "publisher": "SurfSpot",
+  "version": "2.0.3",
+  "author": {"name": "Nicolas Laurentino"},
+  "publisher": "Surfspot Systems",
   "repository": {
     "type": "git",
     "url": "https://github.com/LaurentinoNicolas/documentacao-sql-helper"

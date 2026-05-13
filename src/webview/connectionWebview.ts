@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
-import { testarConexao } from '../database/connection';
-import * as sql from 'mssql';
 import { clearCache } from '../utils/cache';
+import { testarConexao, resetConnection } from '../database/connection';
 
-let pool: sql.ConnectionPool | null = null;
 
 export async function openConnectionWebview(context: vscode.ExtensionContext) {
 
@@ -76,11 +74,7 @@ export async function openConnectionWebview(context: vscode.ExtensionContext) {
 
          await context.secrets.store('documentacaoSql.db.password', message.password);
 
-         if (pool) {
-            await pool.close();
-            pool = null;
-         }
-
+         await resetConnection();
          clearCache();
 
          vscode.window.showInformationMessage('Configuração salva!');
