@@ -1,4 +1,4 @@
-# SQL Documentation
+# Documentação SQL Helper
 
 Documente trechos SQL diretamente no VS Code usando comentários `--@doc:` e mantenha as descrições centralizadas em um banco SQL Server.
 
